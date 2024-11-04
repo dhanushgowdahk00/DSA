@@ -1,0 +1,95 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include<ctype.h>
+
+#define NUM_DAYS_IN_WEEK 7
+
+typedef struct
+{
+char *acDayName;
+int iDate;
+char *acActivity;
+}DAYTYPE;
+
+void fnFreeCal(DAYTYPE*);
+void fnDispCal(DAYTYPE*);
+void fnReadCal(DAYTYPE*);
+DAYTYPE *fnCreateCal();
+
+int main()
+{
+DAYTYPE *weeklyCalendar=fnCreateCal();
+fnReadCal(weeklyCalendar);
+fnDispCal(weeklyCalendar);
+fnFreeCal(weeklyCalendar);
+return 0;
+}
+
+DAYTYPE *fnCreateCal()
+{
+DAYTYPE*Calendar=(DAYTYPE*)malloc(NUM_DAYS_IN_WEEK*sizeof(DAYTYPE));
+int i;
+for(i=0;i<NUM_DAYS_IN_WEEK;i++)
+{
+Calendar[i].acDayName=NULL;
+Calendar[i].iDate=0;
+Calendar[i].acActivity=NULL;
+}
+return Calendar;
+}
+
+void fnReadCal(DAYTYPE*Calendar)
+{
+char cChoice;
+int i;
+for(i=0;i<NUM_DAYS_IN_WEEK;i++)
+{
+printf("do you want to enter details for day %d[Y/N]:",i+1);
+scanf("%c",&cChoice);
+getchar();
+if(tolower(cChoice)=='n')
+continue;
+printf("Day Name:");
+char nameBuffer[50];
+scanf("%s",nameBuffer);
+Calendar[i].acDayName = strdup(nameBuffer);
+printf("Date:");
+scanf("%d",&Calendar[i].iDate);
+printf("Activity:");
+char activityBuffer[100];
+scanf("%s",activityBuffer);
+Calendar[i].acActivity = strdup(activityBuffer);
+printf("\n");
+getchar();
+}
+}
+
+void fnDispCal(DAYTYPE*Calendar)
+{
+printf("nWeek's Activity Details:n");
+int i;
+for(i=0;i<NUM_DAYS_IN_WEEK;i++)
+{
+printf("Day %d\n:\n",i+1);
+if(Calendar[i].iDate==0)
+{
+printf("No Activitynn");
+continue;
+}
+printf("Day Name:%s\n",Calendar[i].acDayName);
+printf("Date:%d\n",Calendar[i].iDate);
+printf("Activity:%s\n",Calendar[i].acActivity);
+}
+}
+      
+void fnFreeCal(DAYTYPE*Calendar)
+{
+int i;
+for(i=0;i<NUM_DAYS_IN_WEEK;i++)
+{
+free(Calendar[i].acDayName);
+free(Calendar[i].acActivity);
+}
+free(Calendar);
+}  
